@@ -53,6 +53,12 @@ initializeScene(function(scene) {
     }
   }
 
+  bioCrowds.stats.setMode(1)
+  bioCrowds.stats.domElement.style.position = 'absolute';
+  bioCrowds.stats.domElement.style.left = '0px';
+  bioCrowds.stats.domElement.style.top = '0px';
+  document.body.appendChild(bioCrowds.stats.domElement)
+
   var gui = new DAT.GUI();
 
   // add controls to call the start/stop/restart functions on BioCrowds
