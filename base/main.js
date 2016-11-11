@@ -49,4 +49,3 @@ initialize(function(scene) {
   }
   tick()
 })
-

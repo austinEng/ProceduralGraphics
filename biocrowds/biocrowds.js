@@ -28,13 +28,14 @@ export default class BioCrowds {
         vec2.scaleAndAdd(this.agents[i].position, this.agents[i].position, this.agents[i].velocity, 0.1)
         this.agents[i].updateMesh()
       }
-
+      
+      this.scene.render()
       requestAnimationFrame(this.tick.bind(this))
     }
   }
 
   addAgent(agent) {
     this.agents.push(agent)
-    this.scene.add(agent.mesh)
+    this.scene.scene.add(agent.mesh)
   }
 }

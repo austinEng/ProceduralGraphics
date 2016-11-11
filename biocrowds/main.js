@@ -35,7 +35,7 @@ function initializeScene(callback) {
 initializeScene(function(scene) {
 
   // initialize BioCrowds
-  let bioCrowds = new BioCrowds(scene.scene)
+  let bioCrowds = new BioCrowds(scene)
 
   // LOOK: here's an example of how you might add agents
   for (let i = 0; i < 10; ++i) {

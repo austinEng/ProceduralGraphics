@@ -1,7 +1,8 @@
 module.exports = {
   entry: {
     "/": "./home.js",
-    "base/": "./base/main.js"
+    "base/": "./base/main.js",
+    "biocrowds/": "./biocrowds/main.js"
   },
   output: {
       path: __dirname,
@@ -26,5 +27,9 @@ module.exports = {
         loader: "html!markdown" 
       }
     ]
+  },
+  devtool: 'source-map',
+  devServer: {
+    port: 7000
   }
 };
