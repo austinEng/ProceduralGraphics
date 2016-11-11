@@ -32,5 +32,11 @@ initialize(function(scene) {
   gui.add(scene.camera, 'fov', 0, 180).onChange(val => {
     scene.camera.updateProjectionMatrix();
   })
+  
+  var tick = function() {
+    scene.render()
+    requestAnimationFrame(tick) // ask the browser to call this function again whenever ready
+  }
+  tick()
 })
 

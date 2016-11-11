@@ -44,8 +44,5 @@ export default class Scene {
 
   render() {
     this.renderer.render(this.scene, this.camera);
-
-    // request to render the scene again when the browser is ready
-    requestAnimationFrame(this.render.bind(this));
   }
 }
