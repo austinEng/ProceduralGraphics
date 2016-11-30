@@ -1,12 +1,13 @@
 
 require('../style/main.less')
 
-const THREE = require('three')
+const THREE = require('three') // LOOK: some modules are imported like this. You shouldn't have to worry about this much
 import DAT from 'dat-gui'
 import Scene from '../framework/scene'
 import Stats from 'stats-js'
+import Module from './module' // LOOK: Import modules like this
 
-function initialize(callback) {
+function initialize() {
   var box = new THREE.BoxGeometry(1, 1, 1);
   var lambertWhite = new THREE.MeshLambertMaterial({ color: 0xeeeeee });
   var lambertCube = new THREE.Mesh(box, lambertWhite);
@@ -15,20 +16,15 @@ function initialize(callback) {
   directionalLight.position.set(1, 3, 2);
   directionalLight.position.multiplyScalar(10);
 
-  var scene = new Scene(function() {
-    scene.scene.add(lambertCube);
-    scene.scene.add(directionalLight);
+  var gui = new DAT.GUI();
 
-    scene.camera.position.set(1, 1, 2);
-    scene.camera.lookAt(new THREE.Vector3(0,0,0));
+  var scene = Scene()
+  scene.scene.add(lambertCube);
+  scene.scene.add(directionalLight);
 
-    callback(scene)
-  });
-}
+  scene.camera.position.set(1, 1, 2);
+  scene.camera.lookAt(new THREE.Vector3(0,0,0));
 
-var gui = new DAT.GUI();
-
-initialize(function(scene) {
   // edit params and listen to changes like this
   gui.add(scene.camera, 'fov', 0, 180).onChange(val => {
     scene.camera.updateProjectionMatrix();
@@ -40,12 +36,23 @@ initialize(function(scene) {
   stats.domElement.style.left = '0px';
   stats.domElement.style.top = '0px';
   document.body.appendChild(stats.domElement)
-  
+
   var tick = function() {
     stats.begin()
     scene.render()
     stats.end()
     requestAnimationFrame(tick) // ask the browser to call this function again whenever ready
   }
-  tick()
-})
+
+  // execute this when the scene is done loading
+  scene.loaded.then(function() {
+    tick()
+  })
+}
+
+initialize()
+
+var list = Module.LinkedList()
+list.append(1)
+list.append(2)
+console.log(list)

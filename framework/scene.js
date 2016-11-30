@@ -2,23 +2,28 @@
 const THREE = require('three')
 const OrbitControls = require('three-orbit-controls')(THREE)
 
-export default class Scene {
-  constructor(callback) {
+export default function Scene() {
+  var scene = {}
 
-    // wait till the window loads before initializing
-    window.addEventListener('load', () => {
-      // initialize the scene
-      this.renderer = new THREE.WebGLRenderer( { antialias: true } );
-      this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
-      this.scene  = new THREE.Scene();
+  // initialize scene and camera
+  scene.camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+  scene.scene  = new THREE.Scene();
+
+  // create a promise so we know when the scene is done loading
+  scene.loaded = new Promise(function(doneLoading) {
+
+    // LOOK: initialize the scene on load because we need to gl canvas to exist
+    window.addEventListener('load', function() {
+      // initialize the scene renderer
+      scene.renderer = new THREE.WebGLRenderer( { antialias: true } );
       
       // set up renderer params
-      this.renderer.setPixelRatio(window.devicePixelRatio);
-      this.renderer.setSize(window.innerWidth, window.innerHeight);
-      this.renderer.setClearColor(0x020202, 0);
+      scene.renderer.setPixelRatio(window.devicePixelRatio);
+      scene.renderer.setSize(window.innerWidth, window.innerHeight);
+      scene.renderer.setClearColor(0x020202, 0);
 
       // set up camera controls
-      let controls = new OrbitControls(this.camera, this.renderer.domElement);
+      var controls = new OrbitControls(scene.camera, scene.renderer.domElement);
       controls.enableDamping = true;
       controls.enableZoom = true;
       controls.target.set(0, 0, 0);
@@ -27,22 +32,25 @@ export default class Scene {
       controls.panSpeed = 2.0;
 
       // render the scene
-      this.render();
+      scene.render();
 
-      document.body.appendChild(this.renderer.domElement);
-      callback()
-    });
-    
-    // add an event listener to resize the canvas on window resize
-    window.addEventListener('resize', e => {
-      this.camera.aspect = window.innerWidth / window.innerHeight;
-      this.camera.updateProjectionMatrix();
+      document.body.appendChild(scene.renderer.domElement);
 
-      this.renderer.setSize(window.innerWidth, window.innerHeight);
-    }, false);
+      doneLoading() // fulfill the Promise so anything waiting on this can run
+    })
+  })
+
+  // add an event listener to resize the canvas on window resize
+  window.addEventListener('resize', function() {
+    scene.camera.aspect = window.innerWidth / window.innerHeight;
+    scene.camera.updateProjectionMatrix();
+
+    scene.renderer.setSize(window.innerWidth, window.innerHeight);
+  }, false);
+
+  scene.render = function() {
+    scene.renderer.render(scene.scene, scene.camera)
   }
 
-  render() {
-    this.renderer.render(this.scene, this.camera);
-  }
+  return scene
 }

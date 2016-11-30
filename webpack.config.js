@@ -1,12 +1,12 @@
 module.exports = {
   entry: {
-    "/": "./home.js",
-    "base/": "./base/main.js",
-    "biocrowds/": "./biocrowds/main.js"
+    "/bundle.js": "./home.js",
+    "base/bundle.js": "./base/main.js",
+    "biocrowds/bundle.js": "./biocrowds/main.js"
   },
   output: {
       path: __dirname,
-      filename: "[name]bundle.js"
+      filename: "[name]"
   },
   module: {
     loaders: [
